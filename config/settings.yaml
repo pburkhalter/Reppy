@@ -1,0 +1,60 @@
+system:
+  paths:
+    upload: /tmp/upload
+    unpack: /tmp/unpack
+    current: /var/printer/tasks/current
+    settings: /var/printer/conf
+
+print:
+  layer:
+    default:
+      speed: 5 # mm/s TODO
+      height: 5 # mm TODO
+      blackout: 10 # ms
+      exposure: 6500 # ms
+    bottom:
+      speed: 5 # mm/s TODO
+      height: 5 # mm TODO
+      layers: 10 # layers
+      blackout: 10 # ms
+      exposure: 10000 # ms
+  retraction:
+    speed: 5 # mm/s TODO
+    height: 2 # mm TODO
+  acceleration:
+    min_delay: 1 # ms TODO
+    max_delay: 100 # ms TODO
+  resin:
+    settling: 100 # ms
+
+machine:
+  name: Wanhao Duplicator D8
+  dimensions:
+    x: 192 # width in mm
+    y: 120 # length in mm
+    z: 180 # height in mm
+  accuracy:
+    x: 0.075 # 75µm
+    y: 0.075 # 75µm
+    z: 0.010 # 10µm
+  resolution:
+    x: 2560 # px
+    y: 1600 # px
+
+gpio:
+  motor_stepping: # not used at the moment
+    pin: false # TODO
+    mode: OUT
+  motor_direction:
+    pin: 1 # TODO
+    mode: OUT
+  motor_enabled:
+    pin: 2 # TODO
+    mode: OUT
+  limit_switch:
+    pin: 3
+    mode: IN
+    level: UP # TODO
+  led_switch:
+    pin: 4 # TODO
+    mode: OUT
