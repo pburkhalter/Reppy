@@ -4,7 +4,7 @@ import uuid
 
 
 # Usage for message transport between threads (via message queue):
-# task = TaskMessage(data={"command_name": "start_process", "args": [1, 2, 3]})
+# task = TaskMessage(recipient, command, message, msg_id, timestamp)
 # serialized_task = task.serialize()
 # received_task = TaskMessage.deserialize(serialized_task)
 

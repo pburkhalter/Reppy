@@ -37,7 +37,12 @@ class PrintManager:
 
     def process(self):
         task_id = self.task['id']
+        task_recipient = self.task['recipient']
+        task_command = self.task['command']
         task_data = self.task['data']
+
+        if not (task_recipient == "print" and task_command == "PRINT"):
+            return False
 
         logging.info(f"Processing print: {task_id}")
 
@@ -49,8 +54,11 @@ class PrintManager:
             self.__layer_total = len(self.md.images)
 
             for index, (key, value) in enumerate(self.md.images):
+                logging.info(f"Processing layer: {self.__layer_current} of {self.__layer_total} "
+                             f"({self.__layer_current} / {self.__layer_total}%)")
+
                 # print bottom layers (over-exposure for plate-adhesion)
-                while index < settings_dict['print']['layer']['bottom']['layers']:
+                while index <= settings_dict['print']['layer']['bottom']['layers']:
                     self.layer(
                         self.md.images[index]['filepath'],
                         settings_dict['print']['layer']['bottom']['height'],
@@ -59,12 +67,13 @@ class PrintManager:
                     )
 
                 # print remaining layers (normal exposure)
-                self.layer(
-                    self.md.images[index]['filepath'],
-                    settings_dict['print']['layer']['default']['height'],
-                    settings_dict['print']['layer']['default']['exposure'],
-                    settings_dict['print']['layer']['default']['blackout']
-                )
+                if index > settings_dict['print']['layer']['bottom']['layers']:
+                    self.layer(
+                        self.md.images[index]['filepath'],
+                        settings_dict['print']['layer']['default']['height'],
+                        settings_dict['print']['layer']['default']['exposure'],
+                        settings_dict['print']['layer']['default']['blackout']
+                    )
 
     def layer(self, image, layer_height, exposure_time, blackout_time):
         # move the motor uf for the height of one layer

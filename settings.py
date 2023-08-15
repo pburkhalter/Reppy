@@ -92,7 +92,6 @@ class SystemSettings:
     def __setitem__(self, key, value):
         if key in self.settings:
             self.settings[key] = value
-            self.save()
         else:
             raise KeyError(f"'{key}' not found")
 

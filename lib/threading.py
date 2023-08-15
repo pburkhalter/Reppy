@@ -7,14 +7,11 @@ from settings import settings_dict
 
 class ThreadManager:
     def __init__(self):
-        self.queues = {} # Dictionary to store queues
+        self.queue = queue.Queue()
         self.threads = {}  # Dictionary to store threads
         self.stop_events = {}  # Dictionary to store stop events for threads
 
     def register(self, name, func, **kwargs):
-        # register queue
-        self.queues[name] = queue.Queue()
-
         # register stop event
         self.stop_events[name] = threading.Event()
 
@@ -22,7 +19,7 @@ class ThreadManager:
         self.threads[name] = threading.Thread(
             target=func,
             name=name,
-            args=(self.queues[name],),
+            args=(self.queue,),
             kwargs=kwargs)
 
     def start(self):

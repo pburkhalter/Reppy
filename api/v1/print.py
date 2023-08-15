@@ -1,5 +1,6 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, current_app
 
+from lib.task import TaskMessage
 
 printer = Blueprint('printer', __name__)
 
@@ -7,6 +8,9 @@ printer = Blueprint('printer', __name__)
 @printer.route('/start', methods=['POST'])
 def start_print():
     # Logic to start printing
+    task = TaskMessage()
+    st = task.serialize()
+    current_app.q.put(st)
     pass
 
 
