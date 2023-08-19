@@ -1,0 +1,104 @@
+system:
+  type: dict
+  schema:
+    paths:
+      type: dict
+      schema:
+        upload: {type: string}
+        unpack: {type: string}
+        current: {type: string}
+        settings: {type: string}
+    filetypes:
+      type: dict
+      schema:
+        allowed:
+          type: list
+          schema: {type: string}
+    modules:
+      type: dict
+      schema:
+        api: {type: string}
+        console: {type: string}
+
+print:
+  type: dict
+  schema:
+    layer:
+      type: dict
+      schema:
+        default:
+          type: dict
+          schema:
+            speed: {type: integer}
+            height: {type: integer}
+            blackout: {type: integer}
+            exposure: {type: integer}
+        bottom:
+          type: dict
+          schema:
+            speed: {type: integer}
+            height: {type: integer}
+            layers: {type: integer}
+            blackout: {type: integer}
+            exposure: {type: integer}
+    acceleration:
+      type: dict
+      schema:
+        min_delay: {type: integer}
+        max_delay: {type: integer}
+    resin:
+      type: dict
+      schema:
+        settling: {type: integer}
+
+machine:
+  type: dict
+  schema:
+    name: {type: string}
+    dimensions:
+      type: dict
+      schema:
+        x: {type: integer}
+        y: {type: integer}
+        z: {type: integer}
+    accuracy:
+      type: dict
+      schema:
+        x: {type: float}
+        y: {type: float}
+        z: {type: float}
+    resolution:
+      type: dict
+      schema:
+        x: {type: integer}
+        y: {type: integer}
+
+gpio:
+  type: dict
+  schema:
+    motor_stepping:
+      type: dict
+      schema:
+        pin: {type: [integer, boolean]}
+        mode: {type: string, allowed: [OUT, IN]}
+    motor_direction:
+      type: dict
+      schema:
+        pin: {type: integer}
+        mode: {type: string, allowed: [OUT, IN]}
+    motor_disabled:
+      type: dict
+      schema:
+        pin: {type: integer}
+        mode: {type: string, allowed: [OUT, IN]}
+    limit_switch:
+      type: dict
+      schema:
+        pin: {type: integer}
+        mode: {type: string, allowed: [OUT, IN]}
+        level: {type: string, allowed: [UP]}
+    uv_enabled:
+      type: dict
+      schema:
+        pin: {type: integer}
+        mode: {type: string, allowed: [OUT, IN]}

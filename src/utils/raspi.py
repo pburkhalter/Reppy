@@ -1,5 +1,10 @@
 import io
+import logging
 import sys
+
+
+# Configure logging
+logger = logging.getLogger(__name__)
 
 
 # https://raspberrypi.stackexchange.com/questions/5100/detect-that-a-python-program-is-running-on-the-pi
@@ -12,7 +17,9 @@ def is_raspberrypi():
     return False
 
 
-if not is_raspberrypi():
+def load_fake_rpi():
+    logger.debug("Seems like we're not running on a raspberry pi. Loading Fake RPi.GPIO...")
+
     # Replace libraries by fake ones
     import fake_rpi
 

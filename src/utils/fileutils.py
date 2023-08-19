@@ -14,12 +14,12 @@ def delete_old_folders(directory, max_age):
                 try:
                     os.listdir(folder_path)
                     # If files are locked, skip deletion
-                    logging.warning(f"Skipping deletion of {folder_path} because files are locked")
+                    logger.warning(f"Skipping deletion of {folder_path} because files are locked")
                     continue
                 except PermissionError:
                     # If files are not locked, delete folder
                     shutil.rmtree(folder_path)
-                    logging.info(f"Deleted {folder_path}")
+                    logger.info(f"Deleted {folder_path}")
 
 
 def create_folders(directories):

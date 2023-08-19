@@ -5,6 +5,10 @@ import datetime
 from cerberus import Validator
 
 
+# Configure logging
+logger = logging.getLogger(__name__)
+
+
 SYSTEM_PATH = "config/system.json"
 SETTINGS_PATH = "config/settings.yaml"
 VALIDATION_SCHEMA = "config/validate.yaml"
@@ -25,13 +29,13 @@ def parse_yaml(filepath):
             parsed_dict = yaml.safe_load(yaml_content)
             return parsed_dict
     except FileNotFoundError:
-        logging.error(f"The file '{filepath}' was not found.")
+        logger.error(f"The file '{filepath}' was not found.")
         raise
     except PermissionError:
-        logging.error(f"Insufficient permissions to read the file '{filepath}'.")
+        logger.error(f"Insufficient permissions to read the file '{filepath}'.")
         raise
     except yaml.YAMLError as exc:
-        logging.error(f"An error occurred while parsing the YAML content. {exc}")
+        logger.error(f"An error occurred while parsing the YAML content. {exc}")
         raise
 
 
@@ -66,7 +70,7 @@ class Settings:
         if validator.validate(self.settings):
             return True
         else:
-            logging.error(f"Validation errors: {validator.errors}")
+            logger.error(f"Validation errors: {validator.errors}")
             raise KeyError("Settings do contain validation errors!")
 
 

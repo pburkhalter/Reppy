@@ -4,6 +4,11 @@ system:
     unpack: /tmp/unpack
     current: /var/printer/tasks/current
     settings: /var/printer/conf
+  filetypes:
+    allowed: [zip]
+  modules:
+    api: enabled
+    console: enabled
 
 print:
   layer:
@@ -18,9 +23,6 @@ print:
       layers: 10 # layers
       blackout: 10 # ms
       exposure: 10000 # ms
-  retraction:
-    speed: 5 # mm/s TODO
-    height: 2 # mm TODO
   acceleration:
     min_delay: 1 # ms TODO
     max_delay: 100 # ms TODO
@@ -43,18 +45,18 @@ machine:
 
 gpio:
   motor_stepping: # not used at the moment
-    pin: false # TODO
+    pin: 24 # TODO
     mode: OUT
   motor_direction:
     pin: 1 # TODO
     mode: OUT
-  motor_enabled:
+  motor_disabled:
     pin: 2 # TODO
     mode: OUT
   limit_switch:
     pin: 3
     mode: IN
     level: UP # TODO
-  led_switch:
+  uv_enabled:
     pin: 4 # TODO
     mode: OUT
