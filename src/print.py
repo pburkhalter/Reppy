@@ -43,6 +43,7 @@ class PrintLoop:
                     if self.stopped.is_set() or self.paused.is_set():
                         continue
 
+                    logger.info("Print started...")
                     while self.layer_manager.current_layer < self.layer_manager.total_layers:
                         self.layer_manager.next()
                     else:
