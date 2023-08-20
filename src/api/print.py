@@ -4,7 +4,7 @@ from uuid import uuid4
 from flask import Blueprint, request, jsonify, current_app
 
 from settings import settings_dict
-from lib.task import TaskMessage
+from lib.job import PrintJob
 
 
 UPLOAD_FOLDER = settings_dict['system']['paths']['upload']
@@ -29,18 +29,18 @@ class APIPrintEndpoints:
 
     def start(self):
         # Logic to start printing
-        task = TaskMessage("printer", "PRINT", )
-        st = task.serialize()
-        self.queues['print'].put(st)
-        pass
+        job = PrintJob("printer", "PRINT", )
+        sj = job.serialize()
+        self.queues['print'].put(sj)
+        return jsonify({"message": "Print started"}), 200
 
     def stop(self):
         # Logic to stop printing
-        pass
+        return jsonify({"message": "Print stopped"}), 200
 
     def level(self):
         # Logic to level the z-axis
-        pass
+        return jsonify({"message": "Starting leveling"}), 200
 
     def upload(self):
         # Check if the post request has the file part and it's not empty
@@ -56,7 +56,7 @@ class APIPrintEndpoints:
         filepath = os.path.join(UPLOAD_FOLDER, filename)
         file.save(filepath)
 
-        tm = TaskMessage("printer", "PRINT")
+        tm = PrintJob("printer", "PRINT")
         tm.data = {'filepath': filepath}
         self.queues['print'].put(tm.serialize())
 

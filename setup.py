@@ -1,10 +1,9 @@
-import grp
-import io
 import os
+import sys
+import grp
 import pwd
 import shutil
 import subprocess
-import sys
 
 
 # Define setup parameters
@@ -12,8 +11,8 @@ USER = "reppy"
 DEFAULT_PASSWORD = "reppy"
 
 SERVICE_NAME = "reppy"
-EXEC_COMMAND = "/path/to/your/command args"
-WORKING_DIR = "/path/to/working/directory"
+EXEC_COMMAND = "python /opt/reppy/main.py"
+WORKING_DIR = "/opt/reppy"
 PERMISSIONS = 0o755
 
 BOOT_CONFIG_PATH = "/boot/config.txt"
@@ -169,7 +168,7 @@ if __name__ == "__main__":
     print(f"- Files")
     print(f"-- Copy files to '{WORKING_DIR}'...")
     copy_dir("./src", WORKING_DIR)
-    print(f"-- Changing permissions on '{WORKING_DIR}'...")
+    print(f"-- Setting permissions on '{WORKING_DIR}'...")
     set_permissions_and_owner(WORKING_DIR, PERMISSIONS, USER)
 
     # ---------------------------------------------------------------------------------
@@ -186,10 +185,9 @@ if __name__ == "__main__":
         print("- 3/3 Modifying boot-config...")
         if not config_exists():
             print("- File '/boot/config.txt' does not exist. Skipping modifications...")
-            sys.exit(1)
-
-        print("-- Setting display-preferences...")
-        modify_config("hdmi_preferred", 1)
+        else:
+            print("-- Setting display-preferences...")
+            modify_config("hdmi_preferred", 1)
 
     # ---------------------------------------------------------------------------------
 

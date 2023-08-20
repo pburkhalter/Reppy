@@ -1,7 +1,7 @@
 import os
 from flask import Blueprint, request, jsonify, current_app
 
-from lib.task import TaskMessage
+from lib.job import PrintJob
 
 
 class APISystemEndpoints:
@@ -14,12 +14,9 @@ class APISystemEndpoints:
         self.blueprint.add_url_rule('/reboot', 'reboot', self.reboot, methods=['POST'])
 
     def exit(self):
-        # Logic to start printing
-        task = TaskMessage("printer", "PRINT", )
-        st = task.serialize()
-        self.queues['print'].put(st)
-        pass
+        # Logic to exiting
+        return jsonify({"message": "Exiting..."}), 200
 
     def reboot(self):
-        # Logic to reboot
-        pass
+        # Logic to rebooting
+        return jsonify({"message": "Rebooting..."}), 200

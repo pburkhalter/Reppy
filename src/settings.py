@@ -107,6 +107,10 @@ class SystemSettings:
         except (FileNotFoundError, json.JSONDecodeError):
             # If the file is not found or has invalid JSON, return a copy of the default settings
             self.settings = SYSTEM_DEFAULTS.copy()
+
+            # We assume this is the first time running reppy, so we set the initial setup time
+            self.settings['initial_setup_time'] = datetime.datetime.now().strftime()
+
             self.save()
             return self.settings
 
