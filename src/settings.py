@@ -9,9 +9,9 @@ from cerberus import Validator
 logger = logging.getLogger(__name__)
 
 
-SYSTEM_PATH = "config/system.json"
-SETTINGS_PATH = "config/settings.yaml"
-VALIDATION_SCHEMA = "config/validate.yaml"
+SYSTEM_PATH = "src/config/system.json"
+SETTINGS_PATH = "src/config/settings.yaml"
+VALIDATION_SCHEMA = "src/config/validate.yaml"
 
 SYSTEM_DEFAULTS = {
     "is_calibrated": False,
@@ -109,7 +109,7 @@ class SystemSettings:
             self.settings = SYSTEM_DEFAULTS.copy()
 
             # We assume this is the first time running reppy, so we set the initial setup time
-            self.settings['initial_setup_time'] = datetime.datetime.now().strftime()
+            self.settings['initial_setup_time'] = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
 
             self.save()
             return self.settings

@@ -1,9 +1,10 @@
 system:
   paths:
-    upload: /tmp/upload
-    unpack: /tmp/unpack
-    current: /var/printer/tasks/current
-    settings: /var/printer/conf
+    install: /opt/reppy
+    logging: logs
+    current: files/jobs/current
+    upload: files/upload
+    unpack: files/unpack
   filetypes:
     allowed: [zip]
   modules:

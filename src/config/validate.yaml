@@ -7,7 +7,8 @@ system:
         upload: {type: string}
         unpack: {type: string}
         current: {type: string}
-        settings: {type: string}
+        install: {type: string}
+        logging: {type: string}
     filetypes:
       type: dict
       schema:

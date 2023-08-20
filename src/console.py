@@ -1,3 +1,6 @@
+import time
+
+
 class ConsoleHandler:
 
     def __init__(self):
@@ -11,6 +14,7 @@ class ConsoleHandler:
 
     def run(self):
         try:
+            time.sleep(2)
             while True:
                 # Get user input and tokenize it
                 user_input = input("Enter a command: ")

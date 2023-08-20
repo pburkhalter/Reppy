@@ -56,8 +56,7 @@ class APIPrintEndpoints:
         filepath = os.path.join(UPLOAD_FOLDER, filename)
         file.save(filepath)
 
-        tm = PrintJob("printer", "PRINT")
-        tm.data = {'filepath': filepath}
+        tm = PrintJob(filepath)
         self.queues['print'].put(tm.serialize())
 
         return jsonify({"message": "File uploaded successfully", "path": filepath}), 200

@@ -1,4 +1,5 @@
 import logging
+import os
 import sys
 
 from lib.threading import ThreadManager
@@ -10,13 +11,14 @@ from api import APIController
 from console import ConsoleHandler
 
 
-logging.basicConfig(stream=sys.stdout,
-                    level=logging.DEBUG,
-                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.DEBUG,
+                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    handlers=[logging.FileHandler(
+                        os.path.join(settings_dict['system']['paths']['logging'], "application.log")),
+                              logging.StreamHandler()])
 
 # Configure logging
 logger = logging.getLogger(__name__)
-
 
 tm = ThreadManager()
 
