@@ -46,6 +46,7 @@ class StepperDriver:
     def disable(self):
         logger.debug(f"Disabling Stepper Motor")
         Component.on('motor_disabled')
+
     def end_stop_triggered(self):
         if Component.is_set('limit_switch'):
             logger.debug(f"End-Stop triggered")

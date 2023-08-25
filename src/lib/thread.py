@@ -1,12 +1,5 @@
 import threading
 import queue
-import logging
-
-from settings import settings_dict
-
-
-# Configure logging
-logger = logging.getLogger(__name__)
 
 
 class ThreadManager:

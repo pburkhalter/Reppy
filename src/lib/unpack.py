@@ -37,7 +37,7 @@ class UnpackerError(Exception):
 class Unpacker:
     def __init__(self, zip_file_path=None):
         self.zip_file = zip_file_path
-        self.directory_root = settings_dict['system']['path']['unpack']
+        self.directory_root = settings_dict['system']['paths']['unpack']
         self.directory = None
 
         self.extracted_at = datetime.datetime.now()

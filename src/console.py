@@ -1,11 +1,17 @@
 import time
 
+from lib.job import PrintJob
+
 
 class ConsoleHandler:
 
-    def __init__(self):
+    def __init__(self, queues):
+
+        self.queues = queues
+
         self.commands = {
             "print": self.print,
+            "load": self.load,
             "status": self.status,
             "cache": self.cache,
             "exit": self.exit,
@@ -36,6 +42,12 @@ class ConsoleHandler:
 
     def print(self):
         pass
+
+    def load(self, *args):
+        # Check if the 'file' argument is passed
+        if args and args[0] == 'zip':
+            job = PrintJob(args[1])
+            self.queues['print'].put(job.serialize())
 
     def status(self):
         pass

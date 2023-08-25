@@ -1,7 +1,7 @@
 system:
   paths:
     install: /opt/reppy
-    logging: logs
+    logging: ..
     current: files/jobs/current
     upload: files/upload
     unpack: files/unpack

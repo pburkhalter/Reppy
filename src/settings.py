@@ -9,9 +9,9 @@ from cerberus import Validator
 logger = logging.getLogger(__name__)
 
 
-SYSTEM_PATH = "src/config/system.json"
-SETTINGS_PATH = "src/config/settings.yaml"
-VALIDATION_SCHEMA = "src/config/validate.yaml"
+SYSTEM_PATH = "config/system.json"
+SETTINGS_PATH = "config/settings.yaml"
+VALIDATION_SCHEMA = "config/validate.yaml"
 
 SYSTEM_DEFAULTS = {
     "is_calibrated": False,

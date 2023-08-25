@@ -1,8 +1,10 @@
+import os
 import threading
 import queue
 import logging
 import time
 
+from lib.job import PrintJob
 from lib.layer import LayerManager
 from lib.mask import MaskError
 from lib.model import Model, ModelError
@@ -34,10 +36,13 @@ class PrintLoop:
     def loop(self):
         while True:
             try:
-                job = self.queues['print'].get(timeout=2)
-                if job:
-                    dj = job.deserialize()
-                    self.model.load(dj.path)
+                sjob = self.queues['print'].get(timeout=2)
+                if sjob:
+                    job = PrintJob()
+                    print("THEJOB")
+                    job.deserialize(sjob)
+                    print(job.path)
+                    self.model.load(job.path)
                     self.layer_manager.load(self.model)
 
                     if self.stopped.is_set() or self.paused.is_set():
@@ -66,6 +71,7 @@ class PrintLoop:
                 self.stopped.set()
             except Exception as e:
                 logger.error(f"Unhandled Error while Processing layer. Stopping print. Reason: {e}")
+                raise
                 self.stopped.set()
 
     @property
