@@ -168,7 +168,8 @@ if __name__ == "__main__":
     print(f"- Files")
     print(f"-- Copy files to '{WORKING_DIR}'...")
     copy_dir("./src", WORKING_DIR)
-    print(f"-- Setting permissions on '{WORKING_DIR}'...")
+
+    print(f"-- Setting permissions on '{WORKING_DIR}' to '{PERMISSIONS}'...")
     set_permissions_and_owner(WORKING_DIR, PERMISSIONS, USER)
 
     # ---------------------------------------------------------------------------------
