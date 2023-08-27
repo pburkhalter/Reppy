@@ -140,6 +140,9 @@ class StepperDriver:
         self.disable()
 
     def goto(self, pos):
+        if system_dict['motor_position'] is None:
+            raise StepperDriverError("Printer is not leveled! No motor position set...")
+
         delta = system_dict['motor_position'] - pos
         logger.debug(f"Moving motor to Position {pos} (delta of {delta} steps)")
 

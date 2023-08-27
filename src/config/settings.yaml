@@ -9,7 +9,10 @@ system:
     allowed: [zip]
   modules:
     api: enabled
-    console: enabled
+    wsc: enabled
+  wsc:
+    bind: 0.0.0.0
+    port: 8765
 
 print:
   layer:
@@ -43,7 +46,7 @@ machine:
   resolution:
     x: 2560 # px
     y: 1600 # px
-
+  hdmi_port: 0
 gpio:
   motor_stepping: # not used at the moment
     pin: 24 # TODO
@@ -59,5 +62,5 @@ gpio:
     mode: IN
     level: UP # TODO
   uv_enabled:
-    pin: 4 # TODO
+    pin: 23 # TODO
     mode: OUT

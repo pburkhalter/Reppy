@@ -38,12 +38,12 @@ class PrintLoop:
             try:
                 sjob = self.queues['print'].get(timeout=2)
                 if sjob:
-                    job = PrintJob()
-                    print("THEJOB")
-                    job.deserialize(sjob)
-                    print(job.path)
+                    job = PrintJob().deserialize(sjob)
+
                     self.model.load(job.path)
                     self.layer_manager.load(self.model)
+
+                    system_dict['last_job_id'] = job.id
 
                     if self.stopped.is_set() or self.paused.is_set():
                         continue
@@ -53,6 +53,7 @@ class PrintLoop:
                         self.layer_manager.next()
                     else:
                         logger.info("Print ended...")
+                        system_dict['last_job_id'] = None
                         self.layer_manager.stepper.up(100000)
 
             except queue.Empty:
@@ -71,7 +72,6 @@ class PrintLoop:
                 self.stopped.set()
             except Exception as e:
                 logger.error(f"Unhandled Error while Processing layer. Stopping print. Reason: {e}")
-                raise
                 self.stopped.set()
 
     @property

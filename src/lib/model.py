@@ -1,4 +1,5 @@
 import logging
+import os
 
 from lib.unpack import Unpacker, UnpackerError
 from lib.image import ImageProcessor, ImageProcessorError
@@ -27,7 +28,8 @@ class Model:
         if file_path:
             self.filepath = file_path
         try:
-            up = Unpacker(file_path).unpack()
+            up = Unpacker(self.filepath)
+            up.unpack()
             self.images = up.images
             self.config = up.config
         except UnpackerError as e:
@@ -39,7 +41,7 @@ class Model:
     def extract_image_info(self):
         try:
             for image in self.images:
-                img = ImageProcessor(self.images[image])
+                img = ImageProcessor(os.path.abspath(self.images[image]['filepath']))
                 img.validate()
 
                 self.images[image]['info'] = {

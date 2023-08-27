@@ -18,7 +18,7 @@ SYSTEM_DEFAULTS = {
     "is_calibrated": False,
     "calibration_time": False,
     "motor_position": False,
-    "initial_setup_time": datetime.time(),
+    "initial_setup_time": datetime.datetime.now().strftime("%Y-%m-%d-%H:%M:%S"),
     "last_job_id": None
 }
 
@@ -88,6 +88,9 @@ class SystemSettings:
             cls._instance = super().__new__(cls)
         return cls._instance
 
+    def __del__(self):
+        self.save()
+
     def __getitem__(self, key):
         if key in self.settings:
             return self.settings[key]
@@ -97,6 +100,7 @@ class SystemSettings:
     def __setitem__(self, key, value):
         if key in self.settings:
             self.settings[key] = value
+            self.save()
         else:
             raise KeyError(f"'{key}' not found")
 
@@ -108,17 +112,18 @@ class SystemSettings:
         except (FileNotFoundError, json.JSONDecodeError):
             # If the file is not found or has invalid JSON, get a copy of the default settings
             self.settings = SYSTEM_DEFAULTS.copy()
-
-            # We assume this is the first time running reppy, so we set the initial setup time
-            self.settings['initial_setup_time'] = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M:%S")
-
             self.save()
 
     def save(self):
         directory, filename = os.path.split(self.filepath)
         os.makedirs(directory, exist_ok=True)
-        with open(self.filepath, 'w') as f:
-            json.dump(self.settings, f, indent=4)
+        try:
+            with open(self.filepath, 'w') as f:
+                json.dump(self.settings, f, indent=4)
+        except PermissionError as e:
+            logger.error(f"A permission error occurred while saving the system settings file. Reason: {e}")
+        except OSError as e:
+            logger.error(f"An error occurred while saving the system settings file. Reason: {e}")
 
 
 system_dict = SystemSettings()

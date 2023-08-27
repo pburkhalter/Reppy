@@ -19,7 +19,12 @@ system:
       type: dict
       schema:
         api: {type: string}
-        console: {type: string}
+        wsc: {type: string}
+    wsc:
+      type: dict
+      schema:
+        bind: {type: string}
+        port: {type: integer}
 
 print:
   type: dict
@@ -73,6 +78,7 @@ machine:
       schema:
         x: {type: integer}
         y: {type: integer}
+    hdmi_port: {type: integer}
 
 gpio:
   type: dict

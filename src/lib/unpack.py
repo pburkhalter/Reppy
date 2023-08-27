@@ -15,17 +15,17 @@ logger = logging.getLogger(__name__)
 
 
 """
-sample-print.zip
+sample-print.zip (sliced with Chitubox)
 │
-├── config.txt
+├── run.gcode
 │
-├── 00001.png
-├── 00002.png
-├── 00003.png
+├── 1.png
+├── 2.png
+├── 3.png
 │
 │   ... (more png files for each slice/layer) ...
 │
-├── 01000.png
+├── 1000.png
 """
 
 
@@ -50,11 +50,12 @@ class Unpacker:
         elif not getattr(self, 'zip_file', None):
             raise UnpackerError("ZIP-File is not set!")
 
+        logger.debug(f"Unpacking zip file '{self.zip_file}'")
         if self.unpack_zip():
             if not self.parse_images():
                 raise UnpackerError("Could not parse images")
-            if not self.parse_config():
-                raise UnpackerError("Could not parse config")
+            if not self.parse_gcode():
+                raise UnpackerError("Could not parse GCODE file")
 
     def unpack_zip(self):
         try:
@@ -76,28 +77,35 @@ class Unpacker:
 
     def parse_images(self):
         try:
-            # Get a list of PNG files in the specified path and sort them
-            png_files = sorted([f for f in os.listdir(self.directory) if f.lower().endswith('.png')])
+            # Get a list of PNG files in the specified path
+            png_files = [f for f in os.listdir(self.directory) if f.lower().endswith('.png')]
 
-            # Extract numbers from the filenames
-            numbers = [int(re.search(r'(\d+)', file).group(1)) for file in png_files if re.search(r'(\d+)', file)]
+            # Extract numbers from the filenames and sort them
+            numbered_files = []
+            for file in png_files:
+                match = re.search(r'(\d+)', file)
+                if match:  # Check if a number exists in the filename
+                    num = int(match.group(1))
+                    numbered_files.append((num, file))
+
+            numbered_files.sort()
 
             # Check if the files are numbered consecutively
+            numbers = [num for num, _ in numbered_files]
             if any(a - b != 1 for a, b in zip(numbers[1:], numbers[:-1])):
                 logger.error("Files not numbered consecutively!")
                 self.images = {}
             else:
-                # create dict
-                self.images = {num: {'filepath': f"{num}.png"} for num in numbers}
-
+                # Create dict
+                self.images = {num: {'filepath': os.path.join(self.directory, file)} for num, file in numbered_files}
             return self.images
 
         except OSError as e:
             logger.error(f"Error while listing files in directory: {e}")
             return {}
 
-    def parse_config(self):
-        config_file = os.path.join(self.directory, "config.txt")
+    def parse_gcode(self):
+        config_file = os.path.join(self.directory, "run.gcode")
         config = configparser.ConfigParser()
 
         # Check if file exists
@@ -108,12 +116,6 @@ class Unpacker:
             logger.error(f"File '{config_file}' not found.")
             return {}
 
-        # Try reading and parsing the (INI-like) config-file
-        try:
-            config.read(config_file)
-        except configparser.Error as e:
-            logger.error(f"Could not parse the config-file: {e}")
-            return {}
+        # TODO: For now we dont need the gcode
 
-        # Convert to a dictionary
-        return {section: dict(config[section]) for section in config.sections()}
+        return {'content': None}

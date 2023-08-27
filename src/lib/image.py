@@ -32,7 +32,7 @@ class ImageProcessor:
 
         if file_path:
             self.file = file_path
-            self.image = self.open(self.file)
+            self.open()
             self.extract_properties()
 
     def open(self, file_path=None):
@@ -40,6 +40,7 @@ class ImageProcessor:
             self.file = file_path
         try:
             self.image = Image.open(self.file)
+            self.image.load() # force pillow to load the image into memory
         except (FileNotFoundError, PermissionError, UnidentifiedImageError) as e:
             raise ImageProcessorError(f"Error opening the image at '{self.file}': {e}")
 
