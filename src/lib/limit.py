@@ -36,12 +36,7 @@ class LimitSwitch:
         # Callback function to be executed when the limit switch is triggered.
         Component.on('motor_disabled')
         self.triggered = True
-
-        tm = PrintJob(
-            recipient="print",
-            command="EMERGENCY_STOP",
-            message="Emergency-Stop (Limit-Switch)")
-        self.queues['print'].put(tm)
+        self.stopped.set()
 
     def is_triggered(self):
         # Check if the limit switch has been triggered.
@@ -50,6 +45,7 @@ class LimitSwitch:
     def reset(self):
         # Reset the trigger state. Call this after handling a trigger event.
         self.triggered = False
+        self.stopped.clear()
 
     def cleanup(self):
         # Clean up GPIO resources.
