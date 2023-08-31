@@ -8,10 +8,8 @@ from lib.gpio import gpio_dict
 from settings import system_dict
 from settings import settings_dict
 
-
 # Configure logging
 logger = logging.getLogger(__name__)
-
 
 class LimitSwitch:
     triggered = False
@@ -19,6 +17,7 @@ class LimitSwitch:
     motor_pin = False
 
     def __init__(self, queues, stop_event):
+        # Initialize the LimitSwitch instance
         self.queues = queues
         self.stopped = stop_event
 

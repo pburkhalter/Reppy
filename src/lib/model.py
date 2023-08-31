@@ -4,15 +4,12 @@ import os
 from lib.unpack import Unpacker, UnpackerError
 from lib.image import ImageProcessor, ImageProcessorError
 
-
 # Configure logging
 logger = logging.getLogger(__name__)
-
 
 class ModelError(Exception):
     def __init__(self, message):
         super().__init__(message)
-
 
 class Model:
 
@@ -25,6 +22,7 @@ class Model:
             self.load(filepath)
 
     def load(self, file_path=None):
+        # Load a model from the provided file path
         if file_path:
             self.filepath = file_path
         try:
@@ -39,6 +37,7 @@ class Model:
         self.extract_image_info()
 
     def extract_image_info(self):
+        # Extract image information and validate images using ImageProcessor
         try:
             for image in self.images:
                 img = ImageProcessor(os.path.abspath(self.images[image]['filepath']))
@@ -52,4 +51,3 @@ class Model:
             return True
         except ImageProcessorError as e:
             raise ModelError(e)
-

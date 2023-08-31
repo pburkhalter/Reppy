@@ -3,11 +3,11 @@ import logging
 import RPi.GPIO as GPIO
 from settings import settings_dict
 
-
 # Configure logging
 logger = logging.getLogger(__name__)
 
-
+# Raspberry Pi GPIO Pin Layout
+# ... (pin layout diagram here) ...
 """
 Raspberry Pi 4B GPIO Pin Layout (https://github.com/tvierb/raspberry-ascii)
                             J8
@@ -37,7 +37,7 @@ Raspberry Pi 4B GPIO Pin Layout (https://github.com/tvierb/raspberry-ascii)
 
 """
 
-
+# GPIO modes and levels mapping
 GPIO_MODES = {
     "OUT": GPIO.OUT,
     "IN": GPIO.IN
@@ -48,11 +48,9 @@ GPIO_LEVELS = {
     "DOWN": GPIO.PUD_DOWN
 }
 
-
 class GPIOConfigError(Exception):
     def __init__(self, message):
         super().__init__(message)
-
 
 class GPIOConfig:
     # Singleton
@@ -108,6 +106,6 @@ class GPIOConfig:
     def cleanup(self):
         GPIO.cleanup()
 
-
+# Create an instance of GPIOConfig and set up GPIO pins based on settings
 gpio_dict = GPIOConfig()
 gpio_dict.setup(settings_dict['gpio'])

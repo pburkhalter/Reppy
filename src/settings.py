@@ -5,15 +5,15 @@ import logging
 import datetime
 from cerberus import Validator
 
-
 # Configure logging
 logger = logging.getLogger(__name__)
 
-
+# Paths and filenames
 SYSTEM_PATH = "src/config/system.json"
 SETTINGS_PATH = "src/config/settings.yaml"
 VALIDATION_SCHEMA = "src/config/validate.yaml"
 
+# Default system settings
 SYSTEM_DEFAULTS = {
     "is_calibrated": False,
     "calibration_time": False,
@@ -22,8 +22,8 @@ SYSTEM_DEFAULTS = {
     "last_job_id": None
 }
 
-
 def parse_yaml(filepath):
+    # Parse and load YAML content from a file
     try:
         with open(filepath, "r") as yaml_file:
             yaml_content = yaml_file.read()
@@ -38,7 +38,6 @@ def parse_yaml(filepath):
     except yaml.YAMLError as exc:
         logger.error(f"An error occurred while parsing the YAML content. {exc}")
         raise
-
 
 class Settings:
     # Singleton
@@ -61,10 +60,12 @@ class Settings:
             raise KeyError(f"'{key}' not found")
 
     def load(self, filepath):
+        # Load settings from a YAML file
         self.filepath = filepath
         self.settings = parse_yaml(filepath)
 
     def validate(self, schema):
+        # Validate loaded settings against a validation schema
         self.schema = parse_yaml(schema)
         validator = Validator(self.schema)
 
@@ -73,7 +74,6 @@ class Settings:
         else:
             logger.error(f"Validation errors: {validator.errors}")
             raise KeyError("Settings do contain validation errors!")
-
 
 class SystemSettings:
     # Singleton
@@ -105,6 +105,7 @@ class SystemSettings:
             raise KeyError(f"'{key}' not found")
 
     def load(self, filepath):
+        # Load system settings from a JSON file
         self.filepath = filepath
         try:
             with open(self.filepath, 'r') as f:
@@ -115,6 +116,7 @@ class SystemSettings:
             self.save()
 
     def save(self):
+        # Save system settings to a JSON file
         directory, filename = os.path.split(self.filepath)
         os.makedirs(directory, exist_ok=True)
         try:
@@ -125,7 +127,7 @@ class SystemSettings:
         except OSError as e:
             logger.error(f"An error occurred while saving the system settings file. Reason: {e}")
 
-
+# Create instances of system settings and settings
 system_dict = SystemSettings()
 system_dict.load(SYSTEM_PATH)
 
