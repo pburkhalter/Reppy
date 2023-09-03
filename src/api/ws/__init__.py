@@ -4,8 +4,10 @@ import websockets
 from api.ws.handler import WebSocketConsoleHandler
 from settings import settings_dict
 
+
 # Setup logging
 logger = logging.getLogger(__name__)
+
 
 class WebSocketController:
     # Handles WebSocket setup and events

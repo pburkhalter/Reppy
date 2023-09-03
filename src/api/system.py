@@ -1,7 +1,7 @@
 import os
 from flask import Blueprint, request, jsonify, current_app
 
-from lib.job import PrintJob
+from lib.job import Job
 
 class APISystemEndpoints:
     """
@@ -28,7 +28,7 @@ class APISystemEndpoints:
         Returns:
             tuple: JSON response and HTTP status code.
         """
-        # Logic for exiting the system can be added here
+        self.queues['cmd'].put(["exit", {}])
         return jsonify({"message": "Exiting..."}), 200
 
     def reboot(self):
@@ -38,5 +38,5 @@ class APISystemEndpoints:
         Returns:
             tuple: JSON response and HTTP status code.
         """
-        # Logic for rebooting the system can be added here
+        self.queues['cmd'].put(["reboot", {}])
         return jsonify({"message": "Rebooting..."}), 200

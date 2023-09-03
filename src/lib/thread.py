@@ -13,7 +13,7 @@ class ThreadManager:
 
         # Initialize print and system queues
         self.queues['print'] = queue.Queue()
-        self.queues['system'] = queue.Queue()
+        self.queues['cmd'] = queue.Queue()
 
     def register(self, name, func, **kwargs):
         """Register a new thread with its function, name, and optional arguments.

@@ -12,7 +12,7 @@ It uses Python's built-in json, datetime, logging, and uuid libraries.
 """
 
 
-class PrintJob:
+class Job:
     """
     Class for managing print jobs.
     """
@@ -55,7 +55,7 @@ class PrintJob:
             message_str (str): The JSON string to deserialize.
 
         Returns:
-            PrintJob: The deserialized PrintJob object.
+            Job: The deserialized PrintJob object.
         """
         parsed = json.loads(message_str)
         logger.debug(f"Deserializing print job {parsed['header']['id']}")

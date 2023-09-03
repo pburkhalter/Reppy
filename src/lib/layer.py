@@ -20,13 +20,13 @@ class LayerManager:
     Class for managing layers in a 3D printing process.
     """
 
-    def __init__(self):
+    def __init__(self, stopped_event):
         """
         Initialize the LayerManager instance with default values.
         """
         self.model = None
         self.mask = Mask()
-        self.stepper = StepperDriver()
+        self.stepper = StepperDriver(stopped_event)
         self.__layer_current = None
         self.__layer_total = None
 

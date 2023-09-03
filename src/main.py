@@ -4,9 +4,10 @@ import sys
 
 from lib.thread import ThreadManager
 from lib.limit import LimitSwitch
+from lib.print import PrintLoop
 
+from manager import Manager
 from settings import settings_dict
-from print import PrintLoop
 from api import APIController
 from api.ws import WebSocketController
 
@@ -27,7 +28,8 @@ tm = ThreadManager()
 
 # Register various threads
 tm.register("limit", LimitSwitch)  # Registering the z-axis limit switch observer for safety
-tm.register("printer", PrintLoop)  # Registering the print manager for handling print jobs
+tm.register("manager", Manager)  # Registering the manager for handling commands
+tm.register("printer", PrintLoop)  # Registering the print-oop for handling print jobs
 
 # Conditionally register API and WebSocket controllers based on settings
 if settings_dict['system']['modules']['api'] == 'enabled':

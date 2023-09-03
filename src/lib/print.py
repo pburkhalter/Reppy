@@ -4,7 +4,7 @@ import queue
 import logging
 import time
 
-from lib.job import PrintJob
+from lib.job import Job
 from lib.layer import LayerManager
 from lib.mask import MaskError
 from lib.model import Model, ModelError
@@ -25,7 +25,7 @@ class PrintLoop:
         self.paused = threading.Event()
         self.paused.set()
         self.model = Model()
-        self.layer_manager = LayerManager()
+        self.layer_manager = LayerManager(self.stopped)
         self.loop()
 
     def loop(self):
@@ -34,7 +34,7 @@ class PrintLoop:
             try:
                 sjob = self.queues['print'].get(timeout=2)
                 if sjob:
-                    job = PrintJob().deserialize(sjob)
+                    job = Job().deserialize(sjob)
                     self.model.load(job.path)
                     self.layer_manager.load(self.model)
                     system_dict['last_job_id'] = job.id

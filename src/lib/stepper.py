@@ -20,13 +20,15 @@ class StepperDriverError(Exception):
 class StepperDriver:
     """Class for managing the stepper motor driver in a 3D printing system."""
 
-    def __init__(self):
+    def __init__(self, stopped_event):
         """Initialize the StepperDriver instance with default values."""
         self.__machine_stepping = settings_dict['machine']['stepping']
         self.__machine_accuracy_z = settings_dict['machine']['accuracy']['z']
         self.__machine_dimension_z = settings_dict['machine']['dimensions']['z']
         self.__acceleration_min_delay = settings_dict['print']['acceleration']['min_delay']
         self.__acceleration_max_delay = settings_dict['print']['acceleration']['max_delay']
+
+        self.stopped = stopped_event
         self.disable()
 
     def enable(self):
@@ -169,3 +171,6 @@ class StepperDriver:
         system_dict['motor_position'] = 0
         system_dict['is_calibrated'] = True
         system_dict['calibration_time'] = datetime.now().time()
+
+        # the limit observer thread is setting the stopped event if we reach the plate. Reset this.
+        self.stopped.clear()
