@@ -2,25 +2,36 @@ from websocket import create_connection, WebSocketException
 import time
 
 # WebSocket server configuration
-PORT = 8765
-IP = "localhost"
+PORT = 8765  # Port number for WebSocket server
+IP = "localhost"  # IP address of WebSocket server
 
 # Reconnection settings
 MAX_RETRIES = 5  # Maximum number of reconnection attempts
 RETRY_DELAY = 5  # Time to wait before each reconnection attempt in seconds
 
+
 def connect_to_server(ip, port):
+    """
+    Attempt to create a WebSocket connection to the server.
+
+    Args:
+        ip (str): IP address of the WebSocket server.
+        port (int): Port number of the WebSocket server.
+
+    Returns:
+        WebSocket: WebSocket connection object if successful, None otherwise.
+    """
     try:
-        # Attempt to create a WebSocket connection to the server
         ws = create_connection(f"ws://{ip}:{port}/")
         return ws
     except Exception as e:
         print(f"Failed to connect to the server: {e}")
         return None
 
+
 if __name__ == "__main__":
-    retries = 0
-    ws = None
+    retries = 0  # Counter for reconnection attempts
+    ws = None  # WebSocket connection object
 
     # Attempt to connect to the server with reconnection retries
     while retries < MAX_RETRIES:

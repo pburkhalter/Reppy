@@ -9,42 +9,39 @@ import configparser
 
 from settings import settings_dict
 
-
 # Configure logging
 logger = logging.getLogger(__name__)
 
 
-"""
-sample-print.zip (sliced with Chitubox)
-│
-├── run.gcode
-│
-├── 1.png
-├── 2.png
-├── 3.png
-│
-│   ... (more png files for each slice/layer) ...
-│
-├── 1000.png
-"""
-
-
 class UnpackerError(Exception):
+    """Custom exception class for Unpacker errors."""
+
     def __init__(self, message):
         super().__init__(message)
 
 
 class Unpacker:
+    """Class to handle the unpacking of ZIP files containing 3D print data."""
+
     def __init__(self, zip_file_path=None):
+        """Initialize the Unpacker instance.
+
+        Parameters:
+            zip_file_path (str): The path to the ZIP file to be unpacked.
+        """
         self.zip_file = zip_file_path
         self.directory_root = settings_dict['system']['paths']['unpack']
         self.directory = None
-
         self.extracted_at = datetime.datetime.now()
         self.images = {}
         self.config = {}
 
     def unpack(self, zip_file=None):
+        """Unpack the ZIP file and parse its contents.
+
+        Parameters:
+            zip_file (str): Optional path to the ZIP file to be unpacked.
+        """
         if zip_file:
             self.zip_file = zip_file
         elif not getattr(self, 'zip_file', None):
@@ -58,6 +55,7 @@ class Unpacker:
                 raise UnpackerError("Could not parse GCODE file")
 
     def unpack_zip(self):
+        """Unpack the ZIP file to a directory."""
         try:
             subdirectory_date = self.extracted_at.strftime("%Y%m%d%H%M%S")
             subdirectory_uuid = uuid.uuid4().hex
@@ -76,27 +74,22 @@ class Unpacker:
             return None
 
     def parse_images(self):
+        """Parse and sort the image files in the unpacked directory."""
         try:
-            # Get a list of PNG files in the specified path
             png_files = [f for f in os.listdir(self.directory) if f.lower().endswith('.png')]
-
-            # Extract numbers from the filenames and sort them
             numbered_files = []
             for file in png_files:
                 match = re.search(r'(\d+)', file)
-                if match:  # Check if a number exists in the filename
+                if match:
                     num = int(match.group(1))
                     numbered_files.append((num, file))
 
             numbered_files.sort()
-
-            # Check if the files are numbered consecutively
             numbers = [num for num, _ in numbered_files]
             if any(a - b != 1 for a, b in zip(numbers[1:], numbers[:-1])):
                 logger.error("Files not numbered consecutively!")
                 self.images = {}
             else:
-                # Create dict
                 self.images = {num: {'filepath': os.path.join(self.directory, file)} for num, file in numbered_files}
             return self.images
 
@@ -105,10 +98,10 @@ class Unpacker:
             return {}
 
     def parse_gcode(self):
+        """Parse the GCODE file in the unpacked directory."""
         config_file = os.path.join(self.directory, "run.gcode")
         config = configparser.ConfigParser()
 
-        # Check if file exists
         try:
             with open(config_file, 'r') as f:
                 pass
@@ -116,6 +109,5 @@ class Unpacker:
             logger.error(f"File '{config_file}' not found.")
             return {}
 
-        # TODO: For now we dont need the gcode
-
+        # TODO: For now we don't need the gcode
         return {'content': None}

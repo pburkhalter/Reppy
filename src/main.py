@@ -10,29 +10,33 @@ from print import PrintLoop
 from api import APIController
 from api.ws import WebSocketController
 
-
-logging.basicConfig(level=logging.DEBUG,
-                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    handlers=[logging.FileHandler(
-                        os.path.join(settings_dict['system']['paths']['logging'], "application.log")),
-                              logging.StreamHandler()])
-
 # Configure logging
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler(os.path.join(settings_dict['system']['paths']['logging'], "application.log")),
+        logging.StreamHandler()
+    ]
+)
+
 logger = logging.getLogger(__name__)
 
+# Initialize the ThreadManager
 tm = ThreadManager()
 
-tm.register("limit", LimitSwitch)  # registering the z-axis limit switch observer (security)
-tm.register("printer", PrintLoop)  # registering the print manager
+# Register various threads
+tm.register("limit", LimitSwitch)  # Registering the z-axis limit switch observer for safety
+tm.register("printer", PrintLoop)  # Registering the print manager for handling print jobs
 
+# Conditionally register API and WebSocket controllers based on settings
 if settings_dict['system']['modules']['api'] == 'enabled':
-    tm.register("api", APIController)  # registering the flask REST API
+    tm.register("api", APIController)  # Registering the Flask REST API for external control
 
 if settings_dict['system']['modules']['wsc'] == 'enabled':
-    tm.register("wsc", WebSocketController)  # registering the websocket controller
+    tm.register("wsc", WebSocketController)  # Registering the WebSocket controller for real-time communication
 
-
+# Main entry point
 if __name__ == "__main__":
-    # starting registered threads
+    # Start all registered threads
     tm.start()
-

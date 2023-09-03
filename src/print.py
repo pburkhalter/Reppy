@@ -18,31 +18,25 @@ from settings import settings_dict
 logger = logging.getLogger(__name__)
 
 class PrintLoop:
-
     def __init__(self, queues, stop_event):
-        # Initialize the PrintLoop instance
+        """Initialize the PrintLoop instance."""
         self.queues = queues
         self.stopped = stop_event
-
         self.paused = threading.Event()
         self.paused.set()
-
         self.model = Model()
         self.layer_manager = LayerManager()
-
         self.loop()
 
     def loop(self):
-        # Main loop for the print process
+        """Main loop for the print process."""
         while True:
             try:
                 sjob = self.queues['print'].get(timeout=2)
                 if sjob:
                     job = PrintJob().deserialize(sjob)
-
                     self.model.load(job.path)
                     self.layer_manager.load(self.model)
-
                     system_dict['last_job_id'] = job.id
 
                     if self.stopped.is_set() or self.paused.is_set():
@@ -76,5 +70,5 @@ class PrintLoop:
 
     @property
     def progress(self):
-        # Calculate and return the printing progress as a percentage
+        """Calculate and return the printing progress as a percentage."""
         return self.layer_manager.current_layer / self.layer_manager.total_layers

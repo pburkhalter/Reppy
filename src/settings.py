@@ -22,8 +22,17 @@ SYSTEM_DEFAULTS = {
     "last_job_id": None
 }
 
+
 def parse_yaml(filepath):
-    # Parse and load YAML content from a file
+    """
+    Parse and load YAML content from a file.
+
+    Args:
+        filepath (str): The path to the YAML file.
+
+    Returns:
+        dict: Parsed YAML content as a dictionary.
+    """
     try:
         with open(filepath, "r") as yaml_file:
             yaml_content = yaml_file.read()
@@ -39,8 +48,11 @@ def parse_yaml(filepath):
         logger.error(f"An error occurred while parsing the YAML content. {exc}")
         raise
 
+
 class Settings:
-    # Singleton
+    """
+    Singleton class to manage application settings.
+    """
     _instance = None
 
     def __init__(self):
@@ -54,18 +66,40 @@ class Settings:
         return cls._instance
 
     def __getitem__(self, key):
+        """
+        Retrieve a setting by its key.
+
+        Args:
+            key (str): The key to look up.
+
+        Returns:
+            The value associated with the key.
+        """
         if key in self.settings:
             return self.settings[key]
         else:
             raise KeyError(f"'{key}' not found")
 
     def load(self, filepath):
-        # Load settings from a YAML file
+        """
+        Load settings from a YAML file.
+
+        Args:
+            filepath (str): The path to the YAML file.
+        """
         self.filepath = filepath
         self.settings = parse_yaml(filepath)
 
     def validate(self, schema):
-        # Validate loaded settings against a validation schema
+        """
+        Validate loaded settings against a validation schema.
+
+        Args:
+            schema (str): The path to the validation schema.
+
+        Returns:
+            bool: True if validation is successful, otherwise raises an error.
+        """
         self.schema = parse_yaml(schema)
         validator = Validator(self.schema)
 
@@ -75,8 +109,11 @@ class Settings:
             logger.error(f"Validation errors: {validator.errors}")
             raise KeyError("Settings do contain validation errors!")
 
+
 class SystemSettings:
-    # Singleton
+    """
+    Singleton class to manage system settings.
+    """
     _instance = None
 
     def __init__(self):
@@ -92,12 +129,28 @@ class SystemSettings:
         self.save()
 
     def __getitem__(self, key):
+        """
+        Retrieve a system setting by its key.
+
+        Args:
+            key (str): The key to look up.
+
+        Returns:
+            The value associated with the key.
+        """
         if key in self.settings:
             return self.settings[key]
         else:
             raise KeyError(f"'{key}' not found")
 
     def __setitem__(self, key, value):
+        """
+        Set a system setting by its key and save it.
+
+        Args:
+            key (str): The key to set.
+            value: The value to set.
+        """
         if key in self.settings:
             self.settings[key] = value
             self.save()
@@ -105,18 +158,24 @@ class SystemSettings:
             raise KeyError(f"'{key}' not found")
 
     def load(self, filepath):
-        # Load system settings from a JSON file
+        """
+        Load system settings from a JSON file.
+
+        Args:
+            filepath (str): The path to the JSON file.
+        """
         self.filepath = filepath
         try:
             with open(self.filepath, 'r') as f:
-                self.settings = json.load(f)  # Update self.settings directly
+                self.settings = json.load(f)
         except (FileNotFoundError, json.JSONDecodeError):
-            # If the file is not found or has invalid JSON, get a copy of the default settings
             self.settings = SYSTEM_DEFAULTS.copy()
             self.save()
 
     def save(self):
-        # Save system settings to a JSON file
+        """
+        Save system settings to a JSON file.
+        """
         directory, filename = os.path.split(self.filepath)
         os.makedirs(directory, exist_ok=True)
         try:
@@ -126,6 +185,7 @@ class SystemSettings:
             logger.error(f"A permission error occurred while saving the system settings file. Reason: {e}")
         except OSError as e:
             logger.error(f"An error occurred while saving the system settings file. Reason: {e}")
+
 
 # Create instances of system settings and settings
 system_dict = SystemSettings()

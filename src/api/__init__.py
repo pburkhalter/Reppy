@@ -17,9 +17,20 @@ formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(messag
 file_handler.setFormatter(formatter)
 log.addHandler(file_handler)
 
+
 class APIController:
-    # Initialize API Controller
+    """
+    Class to initialize and control the Flask API.
+    """
+
     def __init__(self, queues, stop_event):
+        """
+        Initialize the APIController class.
+
+        Args:
+            queues (dict): Dictionary of queues used for inter-thread communication.
+            stop_event (threading.Event): Event to signal the thread to stop.
+        """
         self.queues = queues
         self.stopped = stop_event
 
@@ -31,19 +42,26 @@ class APIController:
 
         # Initialize Flask app
         self.app = Flask(__name__)
-        
+
         # Register blueprints
         self.register_blueprints()
-        
+
         # Run the app
         self.run()
 
     def register_blueprints(self):
-        # Register each blueprint
+        """
+        Register all the blueprints to the Flask app.
+        """
         for blueprint in self.blueprints:
             blueprint_instance = self.blueprints[blueprint](self.queues)
             self.app.register_blueprint(blueprint_instance.blueprint)
 
     def run(self, debug=False):
-        # Start Flask application
+        """
+        Run the Flask application.
+
+        Args:
+            debug (bool, optional): Whether to run the app in debug mode. Defaults to False.
+        """
         self.app.run(debug=debug)
