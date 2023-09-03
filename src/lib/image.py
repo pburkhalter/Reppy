@@ -1,17 +1,13 @@
 import logging
 from PIL import Image, UnidentifiedImageError, ImageOps
-
 from settings import settings_dict
-
 
 # Configure logging
 logger = logging.getLogger(__name__)
 
-
 class ImageProcessorError(Exception):
     def __init__(self, message):
         super().__init__(message)
-
 
 class ImageProcessor:
     __machine_resolution_x = None
@@ -26,16 +22,19 @@ class ImageProcessor:
     aspect_ratio = None
 
     def __init__(self, file_path=None):
+        # Initialize with machine resolution and aspect ratio
         self.__machine_resolution_x = settings_dict['machine']['resolution']['x']
         self.__machine_resolution_y = settings_dict['machine']['resolution']['y']
         self.__machine_aspect_ratio = self.__machine_resolution_x / self.__machine_resolution_y
 
+        # If a file path is provided, open the image and extract properties
         if file_path:
             self.file = file_path
             self.open()
             self.extract_properties()
 
     def open(self, file_path=None):
+        # Open the image and load it into memory
         if file_path:
             self.file = file_path
         try:
@@ -45,6 +44,7 @@ class ImageProcessor:
             raise ImageProcessorError(f"Error opening the image at '{self.file}': {e}")
 
     def extract_properties(self):
+        # Extract image properties: resolution and aspect ratio
         width, height = self.image.size
 
         self.resolution_x = width
@@ -60,6 +60,7 @@ class ImageProcessor:
             self.image = grayscale_image
 
     def validate(self, to_grayscale=True):
+        # Validate image properties and optionally convert to grayscale
         if not self.resolution_x == self.__machine_resolution_x:
             logger.error("Image resolution width (x) does not match.")
             raise ImageProcessorError("Image resolution width (x) does not match.")
