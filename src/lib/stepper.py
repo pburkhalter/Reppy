@@ -29,7 +29,7 @@ class StepperDriver:
         self.__acceleration_max_delay = settings_dict['print']['acceleration']['max_delay']
 
         self.stopped = stopped_event
-        self.disable()
+        self.enable()
 
     def enable(self):
         """Enable the stepper motor."""
@@ -167,7 +167,7 @@ class StepperDriver:
     def level(self):
         """Level the stepper motor to the printing bed (position 0)."""
         logger.debug(f"Leveling to 0 (printing bed)")
-        self.down(10000000000)
+        self.down(10000000000) # we move down until the limit switch gets triggered.
         system_dict['motor_position'] = 0
         system_dict['is_calibrated'] = True
         system_dict['calibration_time'] = datetime.now().time()

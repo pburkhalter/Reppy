@@ -28,8 +28,8 @@ tm = ThreadManager()
 
 # Register various threads
 tm.register("limit", LimitSwitch)  # Registering the z-axis limit switch observer for safety
-tm.register("manager", Manager)  # Registering the manager for handling commands
-tm.register("printer", PrintLoop)  # Registering the print-oop for handling print jobs
+tm.register("manager", Manager)    # Registering the manager for handling commands
+tm.register("printer", PrintLoop)  # Registering the print-loop for handling print jobs
 
 # Conditionally register API and WebSocket controllers based on settings
 if settings_dict['system']['modules']['api'] == 'enabled':

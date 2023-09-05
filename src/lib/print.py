@@ -22,8 +22,6 @@ class PrintLoop:
         """Initialize the PrintLoop instance."""
         self.queues = queues
         self.stopped = stop_event
-        self.paused = threading.Event()
-        self.paused.set()
         self.model = Model()
         self.layer_manager = LayerManager(self.stopped)
         self.loop()
@@ -39,8 +37,10 @@ class PrintLoop:
                     self.layer_manager.load(self.model)
                     system_dict['last_job_id'] = job.id
 
-                    if self.stopped.is_set() or self.paused.is_set():
+                    if self.stopped.is_set():
                         continue
+
+                    self.layer_manager.stepper.goto(0)
 
                     logger.info("Print started...")
                     while self.layer_manager.current_layer < self.layer_manager.total_layers:
@@ -48,7 +48,7 @@ class PrintLoop:
                     else:
                         logger.info("Print ended...")
                         system_dict['last_job_id'] = None
-                        self.layer_manager.stepper.up(100000)
+                        self.layer_manager.stepper.up(10000)
 
             except queue.Empty:
                 time.sleep(1)

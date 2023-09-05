@@ -2,6 +2,6 @@
     "is_calibrated": false,
     "calibration_time": null,
     "motor_position": 0,
-    "initial_setup_time": "2023-08-27-09:41:08",
+    "initial_setup_time": null,
     "last_job_id": null
 }
