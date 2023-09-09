@@ -1,6 +1,7 @@
 import logging
 import RPi.GPIO as GPIO
 from settings import settings_dict
+from utils.raspi import is_raspberrypi
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -51,9 +52,12 @@ class GPIOConfig:
         # set pin-layout to BCM
         GPIO.setmode(GPIO.BCM)
 
-        # get the board revision
-        self.board_revision = 3  # for local dev with fake pi
-        # self.board_revision = GPIO.RPI_REVISION
+        if not is_raspberrypi():
+            logger.info("Not running on a raspberry Pi. Setting board revision to '3' for local development...")
+            self.board_revision = 3  # for local dev with fake pi
+        else:
+            # get the board revision
+            self.board_revision = GPIO.RPI_REVISION
 
     def __new__(cls, **kwargs):
         """

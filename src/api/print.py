@@ -35,9 +35,9 @@ class APIPrintEndpoints:
         self.stopped = stopped_event
 
         # Register routes
-        self.blueprint.add_url_rule('/start', 'start', self.start, methods=['POST'])
-        self.blueprint.add_url_rule('/stop', 'stop', self.stop, methods=['POST'])
-        self.blueprint.add_url_rule('/level', 'calibrate', self.level, methods=['POST'])
+        self.blueprint.add_url_rule('/start', 'start', self.start, methods=['GET'])
+        self.blueprint.add_url_rule('/stop', 'stop', self.stop, methods=['GET'])
+        self.blueprint.add_url_rule('/level', 'calibrate', self.level, methods=['GET'])
         self.blueprint.add_url_rule('/upload', 'upload', self.upload, methods=['POST'])
 
     def start(self):

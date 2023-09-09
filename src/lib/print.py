@@ -10,6 +10,7 @@ from lib.mask import MaskError
 from lib.model import Model, ModelError
 from lib.stepper import StepperDriverError
 from lib.unpack import UnpackerError
+from utils.raspi import is_raspberrypi
 
 from settings import system_dict
 from settings import settings_dict
@@ -20,25 +21,30 @@ logger = logging.getLogger(__name__)
 class PrintLoop:
     def __init__(self, queues, stop_event):
         """Initialize the PrintLoop instance."""
-        self.queues = queues
-        self.stopped = stop_event
-        self.model = Model()
-        self.layer_manager = LayerManager(self.stopped)
-        self.loop()
+        if not is_raspberrypi():
+            logger.error("Not running on a raspberry Pi. Stopping init of Print-Loop...")
+        else:
+            self.queues = queues
+            self.stopped = stop_event
+            self.model = Model()
+            self.layer_manager = LayerManager(self.stopped)
+            self.loop()
 
     def loop(self):
         """Main loop for the print process."""
         while True:
             try:
+                if self.stopped.is_set():
+                    continue
+
                 sjob = self.queues['print'].get(timeout=2)
+
                 if sjob:
                     job = Job().deserialize(sjob)
                     self.model.load(job.path)
                     self.layer_manager.load(self.model)
                     system_dict['last_job_id'] = job.id
 
-                    if self.stopped.is_set():
-                        continue
 
                     self.layer_manager.stepper.goto(0)
 

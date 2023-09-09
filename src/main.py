@@ -13,7 +13,7 @@ from api.ws import WebSocketController
 
 # Configure logging
 logging.basicConfig(
-    level=logging.DEBUG,
+    level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
         logging.FileHandler(os.path.join(settings_dict['system']['paths']['logging'], "application.log")),

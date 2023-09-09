@@ -7,7 +7,7 @@ class APISystemEndpoints:
     """
     Class to define API endpoints related to system operations like exit and reboot.
     """
-    def __init__(self, queues):
+    def __init__(self, queues, stopped_event):
         """
         Initialize the APISystemEndpoints class.
 
@@ -16,10 +16,11 @@ class APISystemEndpoints:
         """
         self.blueprint = Blueprint('system', __name__)
         self.queues = queues
+        self.stopped = stopped_event
 
         # Register routes
-        self.blueprint.add_url_rule('/exit', 'exit', self.exit, methods=['POST'])
-        self.blueprint.add_url_rule('/reboot', 'reboot', self.reboot, methods=['POST'])
+        self.blueprint.add_url_rule('/exit', 'exit', self.exit, methods=['GET'])
+        self.blueprint.add_url_rule('/reboot', 'reboot', self.reboot, methods=['GET'])
 
     def exit(self):
         """

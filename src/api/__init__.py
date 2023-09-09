@@ -54,7 +54,7 @@ class APIController:
         Register all the blueprints to the Flask app.
         """
         for blueprint in self.blueprints:
-            blueprint_instance = self.blueprints[blueprint](self.queues)
+            blueprint_instance = self.blueprints[blueprint](self.queues, self.stopped)
             self.app.register_blueprint(blueprint_instance.blueprint)
 
     def run(self, debug=False):
@@ -64,4 +64,4 @@ class APIController:
         Args:
             debug (bool, optional): Whether to run the app in debug mode. Defaults to False.
         """
-        self.app.run(debug=debug)
+        self.app.run(debug=debug, port=8080)
