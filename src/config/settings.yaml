@@ -17,19 +17,19 @@ system:
 print:
   layer:
     default:
-      speed: 5 # mm/s TODO
-      height: 5 # mm TODO
-      blackout: 10 # ms
-      exposure: 6500 # ms
+      speed: 5 # mm/s
+      height: 5 # mm
+      blackout: 0.01 # s
+      exposure: 6.5 # s
     bottom:
-      speed: 5 # mm/s TODO
-      height: 5 # mm TODO
+      speed: 5 # mm/s
+      height: 5 # mm
       layers: 10 # layers
-      blackout: 10 # ms
-      exposure: 10000 # ms
+      blackout: 0.01 # s
+      exposure: 10 # s
   acceleration:
-    min_delay: 1 # ms TODO
-    max_delay: 100 # ms TODO
+    min_delay: 0.001 # s
+    max_delay: 0.1 # s
   resin:
     settling: 100 # ms
 
@@ -47,20 +47,21 @@ machine:
     x: 2560 # px
     y: 1600 # px
   hdmi_port: 0
+  stepping: 16
 gpio:
   motor_stepping: # not used at the moment
-    pin: 24 # TODO
+    pin: 24
     mode: OUT
   motor_direction:
-    pin: 1 # TODO
+    pin: 1
     mode: OUT
   motor_disabled:
-    pin: 2 # TODO
+    pin: 2
     mode: OUT
   limit_switch:
     pin: 3
     mode: IN
-    level: UP # TODO
+    level: UP
   uv_enabled:
-    pin: 23 # TODO
+    pin: 23
     mode: OUT

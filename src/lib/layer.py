@@ -38,7 +38,7 @@ class LayerManager:
             model (object): The 3D model to be printed.
         """
         self.model = model
-        self.__layer_current = 0
+        self.__layer_current = list(self.model.images.keys())[0]
         self.__layer_total = len(self.model.images)
         self.stepper.goto(0)
 

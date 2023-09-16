@@ -37,21 +37,21 @@ print:
           schema:
             speed: {type: integer}
             height: {type: integer}
-            blackout: {type: integer}
-            exposure: {type: integer}
+            blackout: {type: float}
+            exposure: {type: float}
         bottom:
           type: dict
           schema:
             speed: {type: integer}
             height: {type: integer}
             layers: {type: integer}
-            blackout: {type: integer}
-            exposure: {type: integer}
+            blackout: {type: float}
+            exposure: {type: float}
     acceleration:
       type: dict
       schema:
-        min_delay: {type: integer}
-        max_delay: {type: integer}
+        min_delay: {type: float}
+        max_delay: {type: float}
     resin:
       type: dict
       schema:
@@ -79,6 +79,7 @@ machine:
         x: {type: integer}
         y: {type: integer}
     hdmi_port: {type: integer}
+    stepping: {type: integer}
 
 gpio:
   type: dict

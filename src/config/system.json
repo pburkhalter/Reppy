@@ -1,7 +1,7 @@
 {
     "is_calibrated": false,
     "calibration_time": null,
-    "motor_position": 0,
+    "motor_position": 6,
     "initial_setup_time": null,
-    "last_job_id": null
+    "last_job_id": "7cd0e1ffda7f4bf8bb8948dca15e117b"
 }

@@ -80,6 +80,7 @@ class GPIOConfig:
         Raises:
             KeyError: If the key is not found.
         """
+
         if key in self.pins:
             return self.pins[key]
         else:

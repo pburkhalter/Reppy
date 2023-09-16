@@ -4,6 +4,7 @@ import logging
 
 from lib.component import Component
 from settings import settings_dict
+from utils.raspi import is_raspberrypi
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -35,7 +36,11 @@ class Mask:
         self.__hdmi_port = settings_dict['machine']['hdmi_port']
         pygame.init()
         self.screen = None
-        self.setup_screen()
+
+        if not is_raspberrypi():
+            logger.error("Not running on a raspberry Pi. Stopping init of Print-Loop...")
+        else:
+            self.setup_screen()
 
     def __del__(self):
         """

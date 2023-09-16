@@ -24,7 +24,7 @@ class Component:
         Returns:
             None
         """
-        if pin in gpio_dict:
+        if gpio_dict[pin]:
             GPIO.output(gpio_dict[pin], GPIO.HIGH)
 
     @staticmethod
@@ -38,7 +38,8 @@ class Component:
         Returns:
             None
         """
-        if pin in gpio_dict:
+
+        if gpio_dict[pin]:
             GPIO.output(gpio_dict[pin], GPIO.LOW)
 
     @staticmethod
@@ -52,7 +53,8 @@ class Component:
         Returns:
             bool: True if the pin is set (HIGH), False otherwise.
         """
-        if GPIO.input(pin) == GPIO.HIGH:
+
+        if GPIO.input(gpio_dict[pin]) == GPIO.HIGH:
             return True
         return False
 
